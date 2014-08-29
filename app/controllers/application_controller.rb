@@ -9,6 +9,14 @@ class ApplicationController < ActionController::Base
     uncaught_error(e)
   end
 
+  def not_found
+    error_info = {
+      :error => "Not Found"
+    }
+
+    render :json => error_info.to_json, :status => 404
+  end
+
   def uncaught_error(e)
 
    error_info = {
