@@ -10,9 +10,9 @@ class Devise::ConfirmationsController < DeviseController
     yield resource if block_given?
 
     if successfully_sent?(resource)
-      respond_with({}, status: 200)
+      render json: resource, status: 200
     else
-      respond_with(resource, status: 400)
+      render json: resource, status: 200
     end
   end
 
@@ -22,9 +22,9 @@ class Devise::ConfirmationsController < DeviseController
     yield resource if block_given?
 
     if resource.errors.empty?
-      respond_with(resource, status: 200)
+      render json: resource, status: 200
     else
-      respond_with(resource.errors, status: 422)
+      render json: resource.errors, status: 400
     end
   end
 
