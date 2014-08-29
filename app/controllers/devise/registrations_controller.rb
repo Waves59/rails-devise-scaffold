@@ -4,8 +4,7 @@ class Devise::RegistrationsController < DeviseController
 
   # GET /resource/sign_up
   def new
-    build_resource({})
-    respond_with self.resource
+    render nothing: true
   end
 
   # POST /resource
@@ -15,23 +14,25 @@ class Devise::RegistrationsController < DeviseController
     if resource.save
       yield resource if block_given?
       if resource.active_for_authentication?
-        set_flash_message :notice, :signed_up if is_flashing_format?
-        sign_up(resource_name, resource)
-        respond_with resource, location: after_sign_up_path_for(resource)
+        sign_in(resource_name, resource)
+        data = JSON.parse(resource.to_json)
+        data[:msg] = Message.render("registrations", "signed_up")
+        render json: data, status: 200
       else
-        set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
         expire_data_after_sign_in!
-        respond_with resource, location: after_inactive_sign_up_path_for(resource)
+        data = JSON.parse(resource.to_json)
+        data[:msg] = Message.render("registrations", "signed_up_but_#{resource.inactive_message}")
+        render json: data, status: 200
       end
     else
       clean_up_passwords resource
-      respond_with resource
+      render json: resource.errors, status: 400
     end
   end
 
   # GET /resource/edit
   def edit
-    render :edit
+    render nothing: true
   end
 
   # PUT /resource
@@ -43,16 +44,16 @@ class Devise::RegistrationsController < DeviseController
 
     if update_resource(resource, account_update_params)
       yield resource if block_given?
-      if is_flashing_format?
-        flash_key = update_needs_confirmation?(resource, prev_unconfirmed_email) ?
-          :update_needs_confirmation : :updated
-        set_flash_message :notice, flash_key
-      end
       sign_in resource_name, resource, bypass: true
-      respond_with resource, location: after_update_path_for(resource)
+      data = JSON.parse(data.to_json)
+      flash_key = update_needs_confirmation?(resource, prev_unconfirmed_email) ?
+                :update_needs_confirmation : :updated
+      data[:msg] = Message.render("registrations", flash_key)
+
+      render json: data, status: 200
     else
       clean_up_passwords resource
-      respond_with resource
+      render json: resource.errors, status: 400
     end
   end
 

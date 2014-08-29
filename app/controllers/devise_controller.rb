@@ -168,4 +168,10 @@ MESSAGE
   def resource_params
     params.fetch(resource_name, {})
   end
+
+  def authenticate_user!(opts={})
+     opts[:scope] = :user
+     ap opts
+     warden.authenticate!(opts) if !devise_controller? || opts.delete(:force)
+   end
 end
