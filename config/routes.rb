@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
-    sessions: 'sessions',
-    confirmations: 'confirmations',
-    registrations: 'registrations',
-    passwords: 'passwords'
+    sessions: 'devise/sessions',
+    confirmations: 'devise/confirmations',
+    registrations: 'devise/registrations',
+    passwords: 'devise/passwords'
   }
 
   root to: "application#not_found", via: :all
