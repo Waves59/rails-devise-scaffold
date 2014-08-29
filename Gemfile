@@ -11,3 +11,4 @@ gem 'puma'
 
 gem 'devise'
 
+gem 'pry-rails', group: :development
