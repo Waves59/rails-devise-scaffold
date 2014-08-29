@@ -45,7 +45,7 @@ class Devise::RegistrationsController < DeviseController
     if update_resource(resource, account_update_params)
       yield resource if block_given?
       sign_in resource_name, resource, bypass: true
-      data = JSON.parse(data.to_json)
+      data = JSON.parse(resource.to_json)
       flash_key = update_needs_confirmation?(resource, prev_unconfirmed_email) ?
                 :update_needs_confirmation : :updated
       data[:msg] = Message.render("registrations", flash_key)

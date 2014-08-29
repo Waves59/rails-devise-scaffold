@@ -22,7 +22,9 @@ class Devise::ConfirmationsController < DeviseController
     yield resource if block_given?
 
     if resource.errors.empty?
-      set_flash_message(:notice, :confirmed) if is_flashing_format?
+      sign_in(resource_name, resource)
+      data = JSON.parse(resource.to_json)
+      data[:msg] = Message.render("confirmations", "confirmed")
       render json: resource, status: 200
     else
       render json: resource.errors, status: 400

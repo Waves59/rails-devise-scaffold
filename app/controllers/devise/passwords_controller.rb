@@ -16,7 +16,7 @@ class Devise::PasswordsController < DeviseController
     if successfully_sent?(resource)
       render json: resource, status: 200
     else
-      render json: resource, status: 400
+      render json: resource.errors, status: 400
     end
   end
 
@@ -34,9 +34,10 @@ class Devise::PasswordsController < DeviseController
     if resource.errors.empty?
       resource.unlock_access! if unlockable?(resource)
       flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
-      set_flash_message(:notice, flash_message) if is_flashing_format?
+      data = JSON.parse(resource.to_json)
+      data[:msg] = Message.render("passwords", flash_message)
       sign_in(resource_name, resource)
-      render json: resource, status: 200
+      render json: data, status: 200
     else
       render json: resource.errors, status: 400
     end
