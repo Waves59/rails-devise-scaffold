@@ -3,6 +3,12 @@ class ApplicationController < ActionController::Base
 
   respond_to :json
 
+  before_filter :json_default
+
+  def json_default
+    request.format = "json" unless params[:format]
+  end
+
   rescue_from Exception do |e|
     uncaught_error(e)
   end

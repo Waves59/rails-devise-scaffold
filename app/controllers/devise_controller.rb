@@ -121,11 +121,6 @@ MESSAGE
     elsif resource.errors.empty?
       :send_instructions
     end
-
-    if notice
-      set_flash_message :notice, notice if is_flashing_format?
-      true
-    end
   end
 
   # Sets the flash message with :key, using I18n. By default you are able

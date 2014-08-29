@@ -10,9 +10,9 @@ class Devise::ConfirmationsController < DeviseController
     yield resource if block_given?
 
     if successfully_sent?(resource)
-      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+      respond_with({}, status: 200)
     else
-      respond_with(resource)
+      respond_with(resource, status: 400)
     end
   end
 
@@ -22,19 +22,10 @@ class Devise::ConfirmationsController < DeviseController
     yield resource if block_given?
 
     if resource.errors.empty?
-      render json: resource.to_json, status: 200
-      # respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+      respond_with(resource, status: 200)
     else
-      render json: resource.errors.to_json, status: 422
-      # respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      respond_with(resource.errors, status: 422)
     end
   end
-
-  protected
-
-    # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      new_session_path(resource_name) if is_navigational_format?
-    end
 
 end

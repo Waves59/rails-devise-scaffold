@@ -12,3 +12,4 @@ gem 'puma'
 gem 'devise'
 
 gem 'pry-rails', group: :development
+gem 'awesome_print'
