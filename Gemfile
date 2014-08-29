@@ -6,6 +6,6 @@ gem 'pg'
 
 gem 'spring',        group: :development
 
-
 gem 'puma'
 
+gem 'devise'
