@@ -15,10 +15,22 @@ class ApplicationController < ActionController::Base
     uncaught_error(e)
   end
 
+  def blank
+    render nothing: true
+  end
+
   def root
     render json: {
       msg: "redirected to root"
     }, status: 400
+  end
+
+  def error
+    error_info = {
+      :error => "Input wrong"
+    }
+
+    render :json => error_info.to_json, :status => 400
   end
 
   def not_found
