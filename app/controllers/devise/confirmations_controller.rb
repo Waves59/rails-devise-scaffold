@@ -12,7 +12,7 @@ class Devise::ConfirmationsController < DeviseController
     if successfully_sent?(resource)
       render json: resource, status: 200
     else
-      render json: resource, status: 200
+      render json: {errors: "unauthenticated"}, status: 401
     end
   end
 
